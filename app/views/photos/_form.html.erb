@@ -1,0 +1,63 @@
+<%= form_for @photo do |d| %>
+<table>
+<tr>
+	<td>Name:</td>
+	<td><%= d.text_field :name %></td>
+	
+</tr>
+ <tr>
+	<td>Details:</td>
+	<td><%= d.text_field :details %></td>
+</tr>
+ 
+<tr>
+ <td>
+       <label  for="exampleInputFile">Photo </label>
+       <%= d.file_field :image,:onchange =>"validateFiles(this);",
+         :data => {
+         :max_file_size => 500.kilobytes
+       }, :id => "inputFile"%>
+     
+    </td>
+</tr>
+
+  <tr>
+	<td><%= d.submit "Save" %></td>
+	<td>
+		<%= link_to "Cancel",photos_path %>
+	</td>
+</tr>
+ </table>
+<% end %>
+
+
+
+
+
+  <script type="text/javascript">
+   function validateFiles(inputFile) {
+     var maxExceededMessage = "This file exceeds the maximum allowed file size (500 KB)";
+     var extErrorMessage = "Only image file with extension: .jpg, .jpeg, .gif or .png is allowed";
+     var allowedExtension = ["jpg", "jpeg", "gif", "png"];
+
+     var extName;
+     var maxFileSize = $(inputFile).data('max-file-size');
+     var sizeExceeded = false;
+     var extError = false;
+
+     $.each(inputFile.files, function() {
+       if (this.size && maxFileSize && this.size > parseInt(maxFileSize)) {sizeExceeded=true;};
+       extName = this.name.split('.').pop();
+       if ($.inArray(extName, allowedExtension) == -1) {extError=true;};
+     });
+     if (sizeExceeded) {
+       window.alert(maxExceededMessage);
+       $(inputFile).val('');
+     };
+
+     if (extError) {
+       window.alert(extErrorMessage);
+       $(inputFile).val('');
+     };
+   }
+ </script>
